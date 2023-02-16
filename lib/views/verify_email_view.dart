@@ -3,10 +3,10 @@ import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 
 class VerifyEmailView extends StatefulWidget {
-  const VerifyEmailView({super.key});
+  const VerifyEmailView({Key? key}) : super(key: key);
 
   @override
-  State<VerifyEmailView> createState() => _VerifyEmailViewState();
+  _VerifyEmailViewState createState() => _VerifyEmailViewState();
 }
 
 class _VerifyEmailViewState extends State<VerifyEmailView> {
@@ -14,30 +14,29 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verify your Email'),
+        title: const Text('Verify email'),
       ),
       body: Column(
         children: [
           const Text(
-            "We've already sent you an email, Check your Inbox or Spam",
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.blue,
-            ),
-          ),
+              "We've sent you an email verification. Please open it to verify your account."),
+          const Text(
+              "If you haven't received a verification email yet, press the button below"),
           TextButton(
             onPressed: () async {
               await AuthService.firebase().sendEmailVerification();
             },
-            child: const Text('Send Verification email again?'),
+            child: const Text('Send email verification'),
           ),
           TextButton(
             onPressed: () async {
               await AuthService.firebase().logOut();
-              // ignore: use_build_context_synchronously
-              Navigator.of(context).pushNamed(registerRoute);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                registerRoute,
+                (route) => false,
+              );
             },
-            child: const Text('Sign out from this account? Click here!'),
+            child: const Text('Restart'),
           )
         ],
       ),

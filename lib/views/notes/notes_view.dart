@@ -7,18 +7,19 @@ import 'package:mynotes/utilities/dialogs/logout_dialog.dart';
 import 'package:mynotes/views/notes/notes_list_view.dart';
 
 class NotesView extends StatefulWidget {
-  const NotesView({super.key});
+  const NotesView({Key? key}) : super(key: key);
 
   @override
-  State<NotesView> createState() => _NotesViewState();
+  _NotesViewState createState() => _NotesViewState();
 }
 
 class _NotesViewState extends State<NotesView> {
-  late final NoteService _notesSerive;
+  late final NotesService _notesService;
   String get userEmail => AuthService.firebase().currentUser!.email!;
+
   @override
   void initState() {
-    _notesSerive = NoteService();
+    _notesService = NotesService();
     super.initState();
   }
 
@@ -38,10 +39,9 @@ class _NotesViewState extends State<NotesView> {
             onSelected: (value) async {
               switch (value) {
                 case MenuAction.logout:
-                  final shouldLogOut = await showLogOutDialog(context);
-                  if (shouldLogOut) {
+                  final shouldLogout = await showLogOutDialog(context);
+                  if (shouldLogout) {
                     await AuthService.firebase().logOut();
-                    // ignore: use_build_context_synchronously
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       loginRoute,
                       (_) => false,
@@ -51,22 +51,22 @@ class _NotesViewState extends State<NotesView> {
             },
             itemBuilder: (context) {
               return const [
-                PopupMenuItem(
+                PopupMenuItem<MenuAction>(
                   value: MenuAction.logout,
                   child: Text('Log out'),
-                )
+                ),
               ];
             },
-          ),
+          )
         ],
       ),
       body: FutureBuilder(
-        future: _notesSerive.getOrCreateNote(email: userEmail),
+        future: _notesService.getOrCreateUser(email: userEmail),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               return StreamBuilder(
-                stream: _notesSerive.allNotes,
+                stream: _notesService.allNotes,
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
@@ -76,7 +76,7 @@ class _NotesViewState extends State<NotesView> {
                         return NotesListView(
                           notes: allNotes,
                           onDeleteNote: (note) async {
-                            _notesSerive.deleteNote(id: note.id);
+                            await _notesService.deleteNote(id: note.id);
                           },
                           onTap: (note) {
                             Navigator.of(context).pushNamed(
