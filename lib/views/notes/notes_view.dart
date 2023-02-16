@@ -22,12 +22,6 @@ class _NotesViewState extends State<NotesView> {
     super.initState();
   }
 
-//  @override
-//   void dispose() {
-//     _notesSerive.close();
-//     super.dispose();
-//   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,10 +74,17 @@ class _NotesViewState extends State<NotesView> {
                       if (snapshot.hasData) {
                         final allNotes = snapshot.data as List<DatabaseNote>;
                         return NotesListView(
-                            notes: allNotes,
-                            onDeleteNote: (note) async {
-                              _notesSerive.deleteNote(id: note.id);
-                            });
+                          notes: allNotes,
+                          onDeleteNote: (note) async {
+                            _notesSerive.deleteNote(id: note.id);
+                          },
+                          onTap: (note) {
+                            Navigator.of(context).pushNamed(
+                              createOrUpdateNoteRoute,
+                              arguments: note,
+                            );
+                          },
+                        );
                       } else {
                         return const CircularProgressIndicator();
                       }
