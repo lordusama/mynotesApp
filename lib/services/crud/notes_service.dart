@@ -99,9 +99,6 @@ class NotesService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final notes = await db.query(noteTable);
-
-    // print(notes);
-
     return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
   }
 

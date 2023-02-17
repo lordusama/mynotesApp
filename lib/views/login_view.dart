@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
-import 'package:mynotes/utilities/dialogs/error_dialog.dart';
+import '../utilities/dialogs/error_dialog.dart';
 
 class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
 
   @override
   State<LoginView> createState() => _LoginViewState();
@@ -42,18 +42,14 @@ class _LoginViewState extends State<LoginView> {
             enableSuggestions: false,
             autocorrect: false,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              hintText: 'Enter your email here',
-            ),
+            decoration: const InputDecoration(hintText: "Enter Email"),
           ),
           TextField(
             controller: _password,
             obscureText: true,
             enableSuggestions: false,
             autocorrect: false,
-            decoration: const InputDecoration(
-              hintText: 'Enter your password here',
-            ),
+            decoration: const InputDecoration(hintText: "Enter Password"),
           ),
           TextButton(
             onPressed: () async {
@@ -66,46 +62,41 @@ class _LoginViewState extends State<LoginView> {
                 );
                 final user = AuthService.firebase().currentUser;
                 if (user?.isEmailVerified ?? false) {
-                  // user's email is verified
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     notesRoute,
                     (route) => false,
                   );
                 } else {
-                  // user's email is NOT verified
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context).pushNamedAndRemoveUntil(
-                    verifyEmailRoute,
+                    verifyRoute,
                     (route) => false,
                   );
                 }
-              } on UserNotFoundAuthException {
+              } on UserNotfoundAuthException {
                 await showErrorDialog(
                   context,
-                  'User not found',
+                  'user not found',
                 );
               } on WrongPasswordAuthException {
                 await showErrorDialog(
                   context,
-                  'Wrong credentials',
+                  'wrong password/email',
                 );
               } on GenericAuthException {
-                await showErrorDialog(
-                  context,
-                  'Authentication error',
-                );
+                await showErrorDialog(context, 'Authentication Error');
               }
             },
             child: const Text('Login'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                registerRoute,
-                (route) => false,
-              );
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(registerRoute, (route) => false);
             },
-            child: const Text('Not registered yet? Register here!'),
-          )
+            child: const Text('Not Registered yet? Click Here!'),
+          ),
         ],
       ),
     );

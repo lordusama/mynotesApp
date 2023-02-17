@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/utilities/dialogs/generic_dialog.dart';
 
-Future<bool> showDeleteDialog(BuildContext context) {
+Future<bool> showDeleteDialog(
+  BuildContext context,
+) {
   return showGenericDialog<bool>(
     context: context,
     title: 'Delete',
-    content: 'Are you sure you want to delete this item?',
+    content: 'Are you sure?',
     optionsBuilder: () => {
-      'Cancel': false,
+      'Coancel': false,
       'Yes': true,
     },
   ).then(

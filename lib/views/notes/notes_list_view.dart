@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/crud/notes_service.dart';
-import 'package:mynotes/utilities/dialogs/delete_dialog.dart';
+import '../../utilities/dialogs/delete_dialog.dart';
 
 typedef NoteCallback = void Function(DatabaseNote note);
 
@@ -8,7 +8,6 @@ class NotesListView extends StatelessWidget {
   final List<DatabaseNote> notes;
   final NoteCallback onDeleteNote;
   final NoteCallback onTap;
-
   const NotesListView({
     Key? key,
     required this.notes,

@@ -7,6 +7,7 @@ class CreateUpdateNoteView extends StatefulWidget {
   const CreateUpdateNoteView({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CreateUpdateNoteViewState createState() => _CreateUpdateNoteViewState();
 }
 
@@ -41,13 +42,11 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
 
   Future<DatabaseNote> createOrGetExistingNote(BuildContext context) async {
     final widgetNote = context.getArgument<DatabaseNote>();
-
     if (widgetNote != null) {
       _note = widgetNote;
       _textController.text = widgetNote.text;
       return widgetNote;
     }
-
     final existingNote = _note;
     if (existingNote != null) {
       return existingNote;
@@ -89,28 +88,25 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('New Note'),
-      ),
-      body: FutureBuilder(
-        future: createOrGetExistingNote(context),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              _setupTextControllerListener();
-              return TextField(
-                controller: _textController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: 'Start typing your note...',
-                ),
-              );
-            default:
-              return const CircularProgressIndicator();
-          }
-        },
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('New Note'),
+        ),
+        body: FutureBuilder(
+          future: createOrGetExistingNote(context),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                _setupTextControllerListener();
+                return TextField(
+                  controller: _textController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  decoration: const InputDecoration(hintText: 'Type here...'),
+                );
+              default:
+                return const CircularProgressIndicator();
+            }
+          },
+        ));
   }
 }
