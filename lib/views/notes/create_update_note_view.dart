@@ -4,11 +4,10 @@ import 'package:mynotes/services/crud/notes_service.dart';
 import 'package:mynotes/utilities/generics/get_arguments.dart';
 
 class CreateUpdateNoteView extends StatefulWidget {
-  const CreateUpdateNoteView({Key? key}) : super(key: key);
+  const CreateUpdateNoteView({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _CreateUpdateNoteViewState createState() => _CreateUpdateNoteViewState();
+  State<CreateUpdateNoteView> createState() => _CreateUpdateNoteViewState();
 }
 
 class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
@@ -52,7 +51,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
       return existingNote;
     }
     final currentUser = AuthService.firebase().currentUser!;
-    final email = currentUser.email!;
+    final email = currentUser.email;
     final owner = await _notesService.getUser(email: email);
     final newNote = await _notesService.createNote(owner: owner);
     _note = newNote;
